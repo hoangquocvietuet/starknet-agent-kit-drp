@@ -27,6 +27,7 @@ async function init() {
 }
 
 async function getResponse(request: string) {
+    return 'I am a response';
     const res = await fetch('https://starknet-agent-kit-production.up.railway.app/api/key/request', {
         method: 'POST',
         headers: {
@@ -58,7 +59,7 @@ async function processRequest(input: string) {
     );
     const responseMessage = (drpNode.objectStore.get('chat')!.drp as ChatDRP).query_reponseMessageByRequest(request_id);
     console.log('Response Message:', responseMessage);
-    console.log('Response:', drpNode.objectStore.get('chat')!.hashGraph.getAllVertices());
+    console.log('Hash graph:', drpNode.objectStore.get('chat')!.hashGraph);
 }
 
 async function main() {
@@ -72,8 +73,12 @@ async function main() {
         rl.question('Enter your message: ', async (input) => {
             const newObject = drpNode.objectStore.get('chat');
             if (newObject) drpObject = newObject;
-            console.log('all peers', drpNode.networkNode.getAllPeers());
-            await processRequest(input);
+            try {
+                console.log('all peers', drpNode.networkNode.getAllPeers());
+                await processRequest(input);
+            } catch (error) {
+                console.log('Error:', error);
+            }
             if (input === 'exit') {
                 rl.close();
             } else {

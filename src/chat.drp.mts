@@ -40,7 +40,6 @@ export class ChatDRP implements DRP {
             request_id,
             content
         });
-        return this.agentMessages.length.toString();
     }
 
     query_userMessage = (id: string) => {
